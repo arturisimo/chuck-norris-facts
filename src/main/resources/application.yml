@@ -1,0 +1,25 @@
+spring:
+  kafka:
+    properties:
+      bootstrap.servers: localhost:9092
+  cloud:
+    stream:
+      function:
+        definition: consumerChuckNorris;producerChuckNorris;
+      bindings:
+        producerChuckNorris-out-0:
+          binder: kafka
+          destination: chuck-norris-facts #topic
+        consumerChuckNorris-in-0:
+          binder: kafka
+          destination: chuck-norris-facts #topic
+          group: factsGroup
+      kafka:
+        binder:
+          auto-create-topics: true
+          producer-properties:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+          consumer-properties:
+            key-serializer: org.apache.kafka.common.serialization.StringDeSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringDeSerializer
